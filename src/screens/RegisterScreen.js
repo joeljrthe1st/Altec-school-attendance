@@ -2,27 +2,34 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const handleLogin = () => {
-    // Perform login logic here
-    const isLoginSuccessful = false;
-    if (isLoginSuccessful) {
-      navigation.navigate("Homecontainer");
-    } else {
-      // Handle login failure
-      alert("Login failed. Please check your credentials.");
-    }
-  };
   return (
     <View className="flex-1 justify-center items-center bg-gray-100">
       <View className="w-3/4">
-        <Text className="text-2xl font-bold mb-4 text-center">Login</Text>
+        <Text className="text-2xl font-bold mb-4 text-center">Register</Text>
         <TextInput
           className="border border-gray-300 rounded px-3 py-2 mb-4"
-          placeholder="Username"
+          placeholder="First Name"
+          value={firstname}
+          onChangeText={setFirstname}
+        />
+        <TextInput
+          className="border border-gray-300 rounded px-3 py-2 mb-4"
+          placeholder="Last Name"
+          value={lastname}
+          onChangeText={setLastname}
+        />
+        <TextInput
+          className="border border-gray-300 rounded px-3 py-2 mb-4"
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
         />
         <View className="flex-row items-center border border-gray-300 rounded px-3 py-2 mb-4">
           <TextInput
@@ -38,10 +45,10 @@ const LoginScreen = ({ navigation }) => {
             <Ionicons name={isPasswordVisible ? "eye-off" : "eye"} size={20} />
           </TouchableOpacity>
         </View>
-        <Button title="Login" onPress={handleLogin} />
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Button title="Register" onPress={() => {}} />
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text className="mt-4 text-blue-500 text-center">
-            Don't have an account? Register
+            Do you have an account? Login
           </Text>
         </TouchableOpacity>
       </View>
@@ -49,4 +56,4 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
