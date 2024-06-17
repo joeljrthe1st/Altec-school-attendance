@@ -1,0 +1,111 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const LoginScreen = ({ navigation }) => {
+  const [value, setValue] = React.useState({
+    email: "",
+    password: "",
+    error: "",
+  });
+  const [username, setUsername] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin() {
+    try {
+      setLoading(true);
+      if (value.email === "" || value.password === "") {
+        setValue({
+          ...value,
+          error: "Email and password are required.",
+        });
+        alert(value.error);
+        return;
+      }
+      const auth = getAuth();
+      console.log(auth.currentUser.stsTokenManager.accessToken);
+      await signInWithEmailAndPassword(auth, value.email, value.password)
+        .then((userCredential) => {
+          const user = userCredential?.user;
+          setUsername(user?.displayName);
+          setValue({ ...value, password: "", email: "" });
+          navigation.navigate("Homecontainer");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+
+          if (errorCode === "auth/email-already-in-use") {
+            alert("Email Already In use!");
+            return;
+          }
+          if (errorCode === "auth/invalid-email") {
+            alert(" Invalid Email Address!");
+            return;
+          }
+          if (errorCode === "auth/invalid-credential") {
+            alert(" Invalid Password or Email!");
+            return;
+          }
+          alert(`Login failed. Please check your credentials. ${errorCode}`);
+        });
+    } catch (error) {
+      alert(`Login failed. Please check your credentials.`);
+    } finally {
+      setLoading(false);
+    }
+  }
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "position"}
+      className="flex-1 justify-center items-center bg-gray-100"
+    >
+      <View>
+        <Text className="text-2xl font-bold mb-4 text-center">Login</Text>
+        <TextInput
+          className="w-80 border border-gray-300 rounded px-3 py-2 mb-4"
+          placeholder="Email"
+          keyboardType="email-address"
+          value={value.email}
+          onChangeText={(text) => setValue({ ...value, email: text })}
+        />
+        <View className="w-80 flex-row items-center border border-gray-300 rounded px-3 py-2 mb-4">
+          <TextInput
+            className="flex-1"
+            placeholder="Password"
+            secureTextEntry={!isPasswordVisible}
+            value={value.password}
+            onChangeText={(text) => setValue({ ...value, password: text })}
+          />
+          <TouchableOpacity
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            <Ionicons name={isPasswordVisible ? "eye-off" : "eye"} size={20} />
+          </TouchableOpacity>
+        </View>
+        {loading ? (
+          <ActivityIndicator size="large" color="#1e40af" />
+        ) : (
+          <Button title="Login" onPress={handleLogin} />
+        )}
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text className="mt-4 text-blue-500 text-center">
+            Don't have an account? Register
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+export default LoginScreen;
