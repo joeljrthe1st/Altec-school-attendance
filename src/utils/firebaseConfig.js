@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -33,6 +33,7 @@ export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
 
+
 // Write to firebase realtime database.
 export default function writeUserData(
   userId,
@@ -49,4 +50,34 @@ export default function writeUserData(
     email: email,
     password: password,
   });
+}
+
+
+// Fetch the current user's data from firebase realtime database
+export async function fetchUserData(userId) {
+  const userRef = ref(db, "users/" + userId);
+  try {
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("No data available for the user with userId:", userId);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
+}
+
+/// Update the user's data in firebase realtime database
+export async function updateUserData(userId, updatedData) {
+  const userRef = ref(db, "users/" + userId);
+  try {
+    await update(userRef, updatedData);
+    console.log("User data updated successfully");
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    throw error;
+  }
 }

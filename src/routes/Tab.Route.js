@@ -30,7 +30,7 @@ const HomeTabNavigator = () => {
           let iconName;
 
           if (route.name === "Dashboard") {
-            iconName = focused ? "wallet" : "home-outline";
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Boda") {
             iconName = focused ? "bicycle" : "bicycle-outline";
           } else if (route.name === "My Account") {
@@ -39,7 +39,7 @@ const HomeTabNavigator = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "green",
+        tabBarActiveTintColor: "blue",
         tabBarInactiveTintColor: "gray",
         tabBarLabelStyle: {
           fontWeight: 'bold',
@@ -85,7 +85,7 @@ const HomeTabNavigator = () => {
           headerShown: true,
           headerTitle: "My Account",
           headerTitleAlign: "left",
-          headerTitleStyle: { color: 'green', fontSize: 26 },
+          headerTitleStyle: { color: 'black', fontSize: 26 },
         }}
       />
     </Tab.Navigator>

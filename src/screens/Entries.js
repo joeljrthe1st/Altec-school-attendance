@@ -3,7 +3,7 @@ import React from 'react'
 
 const Entries = () => {
   return (
-    <View>
+    <View className="flex-1 justify-center items-center bg-white-100">
       <Text>Entries</Text>
     </View>
   )

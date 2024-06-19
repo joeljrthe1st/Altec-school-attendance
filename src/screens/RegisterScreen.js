@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  ActivityIndicator 
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
