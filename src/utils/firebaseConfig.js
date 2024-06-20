@@ -81,3 +81,23 @@ export async function updateUserData(userId, updatedData) {
     throw error;
   }
 }
+
+export  function writeUserEntries(
+  userId,
+  firstname,
+  lastname,
+  phoneNumber,
+  email,
+  age,
+  amount,
+  
+) {
+  set(ref(db, "usersEntries/" + userId), {
+    firstname: firstname,
+    lastname: lastname,
+    phoneNumber: phoneNumber,
+    email: email,
+    age:age,
+    amount,
+    });
+}
