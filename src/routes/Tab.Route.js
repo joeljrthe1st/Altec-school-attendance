@@ -1,6 +1,6 @@
 import React from "react";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Dashboard from "../screens/Dashboard";
@@ -31,10 +31,10 @@ const HomeTabNavigator = () => {
 
           if (route.name === "Dashboard") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Boda") {
-            iconName = focused ? "bicycle" : "bicycle-outline";
+          } else if (route.name === "Entries") {
+            iconName = focused ? "receipt" : "receipt-outline";
           } else if (route.name === "My Account") {
-            iconName = focused ? "settings" : "person-outline";
+            iconName = focused ? "person" : "person-outline";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -42,12 +42,12 @@ const HomeTabNavigator = () => {
         tabBarActiveTintColor: "blue",
         tabBarInactiveTintColor: "gray",
         tabBarLabelStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
           fontSize: 12, // Adjust font size
         },
         tabBarStyle: {
           height: 70, // Adjust tab bar height
-          backgroundColor: 'white',
+          backgroundColor: "white",
           borderTopWidth: 0, // Hide top border
           shadowColor: "#000",
           shadowOffset: {
@@ -75,7 +75,7 @@ const HomeTabNavigator = () => {
           headerShown: false,
           headerTitle: "Entries",
           headerTitleAlign: "left",
-          headerTitleStyle: { color: 'green', fontSize: 26 },
+          headerTitleStyle: { color: "green", fontSize: 26 },
         }}
       />
       <Tab.Screen
@@ -85,7 +85,7 @@ const HomeTabNavigator = () => {
           headerShown: true,
           headerTitle: "My Account",
           headerTitleAlign: "left",
-          headerTitleStyle: { color: 'black', fontSize: 26 },
+          headerTitleStyle: { color: "black", fontSize: 26 },
         }}
       />
     </Tab.Navigator>
