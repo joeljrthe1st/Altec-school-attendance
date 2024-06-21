@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Button, TextInput, Pressable } from "react-native";
+import { Text, View, Button, TextInput, ActivityIndicator } from "react-native";
 import { auth } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { fetchUserData, updateUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { ScrollView } from "react-native-gesture-handler";
 import CustomAlert from "../utils/CustomAlert";
-import Logout from "../Auth/Logout";
+
 
 const Account = () => {
   const [userData, setUserData] = useState(null);
@@ -38,33 +38,40 @@ const Account = () => {
   }, []);
 
   const handleUpdate = async () => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const userId = currentUser.uid;
-      const updatedData = {};
+    try {
+      setLoading(true);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userId = currentUser.uid;
+        const updatedData = {};
 
-      if (newFirstName && newFirstName !== userData.firstname) {
-        updatedData.firstname = newFirstName;
-      }
-      if (newLastName && newLastName !== userData.lastname) {
-        updatedData.lastname = newLastName;
-      }
-      if (newPhone && newPhone !== userData.phoneNumber) {
-        updatedData.phoneNumber = newPhone;
-      }
+        if (newFirstName && newFirstName !== userData.firstname) {
+          updatedData.firstname = newFirstName;
+        }
+        if (newLastName && newLastName !== userData.lastname) {
+          updatedData.lastname = newLastName;
+        }
+        if (newPhone && newPhone !== userData.phoneNumber) {
+          updatedData.phoneNumber = newPhone;
+        }
 
-      if (Object.keys(updatedData).length > 0) {
-        try {
-          await updateUserData(userId, updatedData);
-          const updatedUserData = await fetchUserData(userId);
-          setAlertMessage("Successfully updated your account");
-          setAlertVisible(true);
-          setAlerttype("success")
-          setUserData(updatedUserData);
-        } catch (error) {
-          console.error("Error updating user data:", error);
+        if (Object.keys(updatedData).length > 0) {
+          try {
+            await updateUserData(userId, updatedData);
+            const updatedUserData = await fetchUserData(userId);
+            setUserData(updatedUserData);
+            setAlertMessage("Account has been updated successfuly");
+            setAlerttype("success")
+            setAlertVisible(true);
+          } catch (error) {
+            console.error("Error updating user data:", error);
+          }
         }
       }
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,7 +130,11 @@ const Account = () => {
             onChangeText={setNewPhone}
           />
         </View>
-        <Button title="Update account" onPress={handleUpdate} />
+        {loading ? (
+          <ActivityIndicator size="large" color="#1e40af" />
+        ) : (
+          <Button title="Update account" onPress={handleUpdate} />
+        )}
       </View>
       <CustomAlert
         visible={alertVisible}

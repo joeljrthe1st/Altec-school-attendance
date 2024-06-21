@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  ActivityIndicator 
+  ActivityIndicator,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -52,7 +52,6 @@ const RegisterScreen = ({ navigation }) => {
         return;
       }
       const auth = await getAuth();
-      console.log(auth.currentUser);
       await createUserWithEmailAndPassword(
         auth,
         value.email,
