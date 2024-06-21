@@ -10,10 +10,14 @@ import { auth, writeUserEntries, fetchUserData } from "../utils/firebaseConfig";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import CustomAlert from "../utils/CustomAlert";
 
 const Entries = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alert_type, setAlerttype] = useState("");
 
   useEffect(() => {
     const getUserData = async () => {
@@ -89,6 +93,9 @@ const Entries = () => {
           values.loanamount
         );
         console.log("User entries written successfully");
+        setAlertMessage("A new User has been added successfuly");
+        setAlerttype("success")
+        setAlertVisible(true);
         reset();
       } catch (error) {
         console.error("Error writing user entries:", error);
@@ -251,6 +258,12 @@ const Entries = () => {
           <Text className="text-white text-center">Submit</Text>
         </TouchableOpacity>
       )}
+        <CustomAlert
+        visible={alertVisible}
+        message={alertMessage}
+        alertType={alert_type}
+        onClose={() => setAlertVisible(false)}
+      />
     </View>
   );
 };

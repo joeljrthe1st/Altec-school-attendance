@@ -1,22 +1,32 @@
 // Logout.js
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Pressable,Alert } from 'react-native';
 import { auth } from '../utils/firebaseConfig';
 
 const Logout = () => {
-  const handleLogout = async () => {
-    try {
-      await auth().signOut();
-      // Navigate to login or home screen after logout
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
+ 
+const check=()=>{
+  Alert.alert(
+    //title
+    '',
+    //body
+    'Are you sure you want to Logout now ?',
+    [
+      { text: 'Yes', onPress: () => auth.signOut() },
+      {
+        text: 'No',
+        // onPress: () => ,
+        style: 'cancel',
+      },
+    ],
+    { cancelable: false }
+    //clicking out side of alert will not cancel
+  );
+}
   return (
     <View>
      
-      <Button title="Logout" onPress={handleLogout} />
+     <Pressable  onPress={()=>check()}><Text>Log Out</Text></Pressable >
     </View>
   );
 };

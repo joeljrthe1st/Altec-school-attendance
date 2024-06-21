@@ -142,8 +142,8 @@ const Account = () => {
         alertType={alert_type}
         onClose={() => setAlertVisible(false)}
       />
-    
-    </ScrollView>
+
+   </ScrollView>
   );
 };
 
