@@ -3,6 +3,7 @@ import { Text, View, Button, TextInput } from "react-native";
 import { auth } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { fetchUserData, updateUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { ScrollView } from "react-native-gesture-handler";
+import CustomAlert from "../utils/CustomAlert";
 
 const Account = () => {
   const [userData, setUserData] = useState(null);
@@ -10,6 +11,8 @@ const Account = () => {
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState("");
   const [newPhone, setNewPhone] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     const getUserData = async () => {
@@ -52,6 +55,8 @@ const Account = () => {
         try {
           await updateUserData(userId, updatedData);
           const updatedUserData = await fetchUserData(userId);
+          setAlertMessage("Successfully updated your account");
+          setAlertVisible(true);
           setUserData(updatedUserData);
         } catch (error) {
           console.error("Error updating user data:", error);
@@ -117,6 +122,11 @@ const Account = () => {
         </View>
         <Button title="Update account" onPress={handleUpdate} />
       </View>
+      <CustomAlert
+        visible={alertVisible}
+        message={alertMessage}
+        onClose={() => setAlertVisible(false)}
+      />
     </ScrollView>
   );
 };
