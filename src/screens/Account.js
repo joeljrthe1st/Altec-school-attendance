@@ -4,6 +4,7 @@ import { auth } from "../utils/firebaseConfig"; // Ensure the correct path to yo
 import { fetchUserData, updateUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { ScrollView } from "react-native-gesture-handler";
 import CustomAlert from "../utils/CustomAlert";
+import Logout from "../Auth/Logout";
 
 const Account = () => {
   const [userData, setUserData] = useState(null);
@@ -130,9 +131,7 @@ const Account = () => {
         alertType={alert_type}
         onClose={() => setAlertVisible(false)}
       />
-      <Pressable>
-        <Text>Logout</Text>
-      </Pressable>
+    
     </ScrollView>
   );
 };
