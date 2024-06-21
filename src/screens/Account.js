@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, Button, TextInput } from 'react-native';
-import { auth } from '../utils/firebaseConfig'; // Ensure the correct path to your Firebase configuration
-import { fetchUserData, updateUserData } from '../utils/firebaseConfig'; // Ensure the correct path to your Firebase configuration
+import React, { useEffect, useState } from "react";
+import { Text, View, Button, TextInput } from "react-native";
+import { auth } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
+import { fetchUserData, updateUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
+import { ScrollView } from "react-native-gesture-handler";
 
 const Account = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [newFirstName, setNewFirstName] = useState('');
-  const [newLastName, setNewLastName] = useState('');
-  const [newPhone, setNewPhone] = useState('');
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
 
   useEffect(() => {
     const getUserData = async () => {
@@ -70,38 +71,53 @@ const Account = () => {
   if (!userData) {
     return (
       <View className="flex-1 justify-center items-center bg-white-100">
-        <Text className="text-2xl font-bold text-red-500">No user data available</Text>
+        <Text className="text-2xl font-bold text-red-500">
+          No user data available
+        </Text>
       </View>
     );
   }
 
   return (
-    <View className="flex-1 justify-center items-center bg-white-100">
-      <Text className="text-xl">First Name: {userData.firstname}</Text>
-      <Text className="text-xl">Last Name: {userData.lastname}</Text>
-      <Text className="text-xl">Phone Number: {userData.phoneNumber}</Text>
-      <Text className="text-xl">Email: {userData.email}</Text>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-white">
+      <View className="flex-1 justify-center items-center bg-white-100">
+        <Text className="w-80 p-4 m-2 bg-gray-200 text-justify">
+          First Name: {userData.firstname}
+        </Text>
+        <Text className="w-80 p-4 m-2 bg-gray-200 text-justify">
+          Last Name: {userData.lastname}
+        </Text>
+        <Text className="w-80 p-4 m-2 bg-gray-200 text-justify">
+          Phone Number: {userData.phoneNumber}
+        </Text>
+        <Text className="w-80 p-4 m-2 bg-gray-200 text-justify">
+          Email: {userData.email}
+        </Text>
 
-      <TextInput
-        placeholder="New First Name"
-        value={newFirstName}
-        onChangeText={setNewFirstName}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <TextInput
-        placeholder="New Last Name"
-        value={newLastName}
-        onChangeText={setNewLastName}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <TextInput
-        placeholder="New Phone Number"
-        value={newPhone}
-        onChangeText={setNewPhone}
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10 }}
-      />
-      <Button title="Update account" onPress={handleUpdate} />
-    </View>
+        <View className="w-80 flex-row items-center border border-gray-300 rounded px-3 py-2 mb-4 mt-1">
+          <TextInput
+            placeholder="New First Name"
+            value={newFirstName}
+            onChangeText={setNewFirstName}
+          />
+        </View>
+        <View className="w-80 flex-row items-center border border-gray-300 rounded px-3 py-2 mb-4">
+          <TextInput
+            placeholder="New Last Name"
+            value={newLastName}
+            onChangeText={setNewLastName}
+          />
+        </View>
+        <View className="w-80 flex-row items-center border border-gray-300 rounded px-3 py-2 mb-4">
+          <TextInput
+            placeholder="New Phone Number"
+            value={newPhone}
+            onChangeText={setNewPhone}
+          />
+        </View>
+        <Button title="Update account" onPress={handleUpdate} />
+      </View>
+    </ScrollView>
   );
 };
 
