@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { auth } from '../utils/firebaseConfig';
 import { fetchUserData } from '../utils/firebaseConfig'; // Ensure the correct path to your Firebase configuration
-
+import Greeting from '../utils/Greeting';
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,7 +47,7 @@ const Dashboard = () => {
   return (
     <View className="flex-1 justify-center items-center bg-white-100">
       <Text className="text-xl font-bold text-blue-500">Dashboard</Text>
-      <Text className="text-small">Hello, {userData.firstname}</Text>
+      <Greeting name={userData.firstname}/>
      
     </View>
   );

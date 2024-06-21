@@ -15,26 +15,11 @@ const Greeting = ({ name }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{getGreeting()}, {name}!</Text>
+    <View >
+      <Text >{getGreeting()}, {name}!</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-  },
-  text: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: '#0C2A02',
-    // textAlign: 'center',
-    maxWidth: '100%', // Ensure the text wraps within 80% of the container width
-  },
-});
 
 export default Greeting;
