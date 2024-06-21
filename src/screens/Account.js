@@ -79,7 +79,7 @@ const Account = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-white">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-white-100">
       <View className="flex-1 justify-center items-center bg-white-100">
         <Text className="w-80 p-4 m-2 bg-gray-200 text-justify">
           First Name: {userData.firstname}
