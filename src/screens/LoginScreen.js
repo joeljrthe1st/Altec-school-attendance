@@ -34,9 +34,8 @@ const LoginScreen = ({ navigation }) => {
           ...value,
           error: "Email and password are required.",
         });
-       // alert(value.error);
         setAlertMessage(value.error);
-        setAlerttype("error")
+        setAlerttype("error");
         setAlertVisible(true);
         return;
       }
@@ -44,7 +43,7 @@ const LoginScreen = ({ navigation }) => {
       await signInWithEmailAndPassword(auth, value.email, value.password)
         .then((userCredential) => {
           const user = userCredential?.user;
-          setUsername(user?.displayName);
+          setUsername(user?.displayName); //TODO Remove, we aren't really using this.
           setValue({ ...value, password: "", email: "" });
           navigation.navigate("Homecontainer");
         })
@@ -53,18 +52,16 @@ const LoginScreen = ({ navigation }) => {
 
           if (errorCode === "auth/email-already-in-use") {
             alert("Email Already In use!");
-            
+
             return;
           }
           if (errorCode === "auth/invalid-email") {
-          //  alert(" Invalid Email Address!");
             setAlertMessage(" Invalid Email Address!");
-            setAlerttype("error")
+            setAlerttype("error");
             setAlertVisible(true);
             return;
           }
           if (errorCode === "auth/invalid-credential") {
-            //alert(" Invalid Password or Email!");
             setAlertMessage(" Invalid Password or Email!");
             setAlertVisible(true);
             return;
@@ -99,9 +96,7 @@ const LoginScreen = ({ navigation }) => {
             value={value.password}
             onChangeText={(text) => setValue({ ...value, password: text })}
           />
-          <Pressable
-            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
+          <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
             <Ionicons name={isPasswordVisible ? "eye-off" : "eye"} size={20} />
           </Pressable>
         </View>
@@ -111,11 +106,11 @@ const LoginScreen = ({ navigation }) => {
           <Button title="Login" onPress={handleLogin} />
         )}
         <CustomAlert
-        visible={alertVisible}
-        message={alertMessage}
-        alertType={alert_type}
-        onClose={() => setAlertVisible(false)}
-      />
+          visible={alertVisible}
+          message={alertMessage}
+          alertType={alert_type}
+          onClose={() => setAlertVisible(false)}
+        />
         <Pressable onPress={() => navigation.navigate("Register")}>
           <Text className="mt-4 text-blue-500 text-center">
             Don't have an account? Register

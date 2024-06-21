@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
 } from "react-native";
 import { auth, writeUserEntries, fetchUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
@@ -62,10 +62,11 @@ const Entries = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm({
     resolver: yupResolver(validationSchema),
+    mode: "onChange", // Trigger validation on change to enable/disable button
   });
 
   const onSubmit = async (values) => {
@@ -94,7 +95,7 @@ const Entries = () => {
         );
         console.log("User entries written successfully");
         setAlertMessage("A new User has been added successfuly");
-        setAlerttype("success")
+        setAlerttype("success");
         setAlertVisible(true);
         reset();
       } catch (error) {
@@ -251,14 +252,15 @@ const Entries = () => {
       {loading ? (
         <ActivityIndicator size="large" color="#1e40af" />
       ) : (
-        <TouchableOpacity
+        <Pressable
           onPress={handleSubmit(onSubmit)}
           className="bg-blue-500 p-2 rounded w-80"
+          disabled={!isValid}
         >
           <Text className="text-white text-center">Submit</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
-        <CustomAlert
+      <CustomAlert
         visible={alertVisible}
         message={alertMessage}
         alertType={alert_type}

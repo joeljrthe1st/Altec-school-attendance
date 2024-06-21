@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -42,7 +41,7 @@ const CustomAlert = ({ visible, message, onClose, alertType }) => {
           <Text style={styles.alertMessage}>{message}</Text>
           {/* OK Button */}
           <Pressable style={styles.okButton} onPress={onClose}>
-            <Text style={styles.buttonText}>Ok</Text>
+            <Text style={styles.buttonText}>OK</Text>
           </Pressable>
         </View>
       </View>
