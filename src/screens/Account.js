@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Button, TextInput } from "react-native";
+import { Text, View, Button, TextInput, Pressable } from "react-native";
 import { auth } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { fetchUserData, updateUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
 import { ScrollView } from "react-native-gesture-handler";
@@ -130,6 +130,9 @@ const Account = () => {
         alertType={alert_type}
         onClose={() => setAlertVisible(false)}
       />
+      <Pressable>
+        <Text>Logout</Text>
+      </Pressable>
     </ScrollView>
   );
 };

@@ -4,7 +4,7 @@ import {
   Text,
   TextInput,
   Button,
-  TouchableOpacity,
+  Pressable,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
@@ -99,11 +99,11 @@ const LoginScreen = ({ navigation }) => {
             value={value.password}
             onChangeText={(text) => setValue({ ...value, password: text })}
           />
-          <TouchableOpacity
+          <Pressable
             onPress={() => setIsPasswordVisible(!isPasswordVisible)}
           >
             <Ionicons name={isPasswordVisible ? "eye-off" : "eye"} size={20} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
         {loading ? (
           <ActivityIndicator size="large" color="#1e40af" />
@@ -116,11 +116,11 @@ const LoginScreen = ({ navigation }) => {
         alertType={alert_type}
         onClose={() => setAlertVisible(false)}
       />
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Pressable onPress={() => navigation.navigate("Register")}>
           <Text className="mt-4 text-blue-500 text-center">
             Don't have an account? Register
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </KeyboardAvoidingView>
   );

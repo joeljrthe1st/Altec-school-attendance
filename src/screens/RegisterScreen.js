@@ -4,7 +4,7 @@ import {
   Text,
   TextInput,
   Button,
-  TouchableOpacity,
+  Pressable,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
@@ -14,6 +14,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import writeUserData from "../utils/firebaseConfig";
+import CustomAlert from "../utils/CustomAlert";
 
 const RegisterScreen = ({ navigation }) => {
   const [value, setValue] = React.useState({
@@ -26,6 +27,9 @@ const RegisterScreen = ({ navigation }) => {
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alert_type, setAlerttype] = useState("");
 
   async function signIn() {
     setLoading(true);
@@ -41,7 +45,10 @@ const RegisterScreen = ({ navigation }) => {
           ...value,
           error: "All the fields are mandatory.",
         });
-        alert(value.error);
+       
+        setAlertMessage(value.error);
+        setAlerttype("error")
+        setAlertVisible(true);
         return;
       }
       const auth = await getAuth();
@@ -74,7 +81,9 @@ const RegisterScreen = ({ navigation }) => {
         ...value,
         error: error.message,
       });
-      alert(error.message);
+      setAlertMessage(error.message);
+      setAlerttype("error")
+      setAlertVisible(true);
     } finally {
       setLoading(false);
     }
@@ -122,25 +131,31 @@ const RegisterScreen = ({ navigation }) => {
               value={value.password}
               onChangeText={(text) => setValue({ ...value, password: text })}
             />
-            <TouchableOpacity
+            <Pressable
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
             >
               <Ionicons
                 name={isPasswordVisible ? "eye-off" : "eye"}
                 size={20}
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
           {loading ? (
             <ActivityIndicator size="large" color="#1e40af" />
           ) : (
             <Button title="Register" onPress={signIn} />
           )}
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Pressable onPress={() => navigation.navigate("Login")}>
             <Text className="mt-4 text-blue-500 text-center">
               Do you have an account? Login
             </Text>
-          </TouchableOpacity>
+          </Pressable>
+            <CustomAlert
+              visible={alertVisible}
+              message={alertMessage}
+              alertType={alert_type}
+              onClose={() => setAlertVisible(false)}
+           />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
