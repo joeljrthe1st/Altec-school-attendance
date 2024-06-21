@@ -34,7 +34,6 @@ const LoginScreen = ({ navigation }) => {
         return;
       }
       const auth = getAuth();
-      console.log(auth.currentUser.stsTokenManager.accessToken);
       await signInWithEmailAndPassword(auth, value.email, value.password)
         .then((userCredential) => {
           const user = userCredential?.user;
