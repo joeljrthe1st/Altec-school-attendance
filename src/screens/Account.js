@@ -13,6 +13,7 @@ const Account = () => {
   const [newPhone, setNewPhone] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [alert_type, setAlerttype] = useState("");
 
   useEffect(() => {
     const getUserData = async () => {
@@ -57,6 +58,7 @@ const Account = () => {
           const updatedUserData = await fetchUserData(userId);
           setAlertMessage("Successfully updated your account");
           setAlertVisible(true);
+          setAlerttype("success")
           setUserData(updatedUserData);
         } catch (error) {
           console.error("Error updating user data:", error);
@@ -125,6 +127,7 @@ const Account = () => {
       <CustomAlert
         visible={alertVisible}
         message={alertMessage}
+        alertType={alert_type}
         onClose={() => setAlertVisible(false)}
       />
     </ScrollView>

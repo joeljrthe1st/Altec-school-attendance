@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import CustomAlert from "../utils/CustomAlert";
 
 const LoginScreen = ({ navigation }) => {
   const [value, setValue] = React.useState({
@@ -21,6 +22,9 @@ const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alert_type, setAlerttype] = useState("");
 
   async function handleLogin() {
     try {
@@ -30,7 +34,10 @@ const LoginScreen = ({ navigation }) => {
           ...value,
           error: "Email and password are required.",
         });
-        alert(value.error);
+       // alert(value.error);
+        setAlertMessage(value.error);
+        setAlerttype("error")
+        setAlertVisible(true);
         return;
       }
       const auth = getAuth();
@@ -46,14 +53,20 @@ const LoginScreen = ({ navigation }) => {
 
           if (errorCode === "auth/email-already-in-use") {
             alert("Email Already In use!");
+            
             return;
           }
           if (errorCode === "auth/invalid-email") {
-            alert(" Invalid Email Address!");
+          //  alert(" Invalid Email Address!");
+            setAlertMessage(" Invalid Email Address!");
+            setAlerttype("error")
+            setAlertVisible(true);
             return;
           }
           if (errorCode === "auth/invalid-credential") {
-            alert(" Invalid Password or Email!");
+            //alert(" Invalid Password or Email!");
+            setAlertMessage(" Invalid Password or Email!");
+            setAlertVisible(true);
             return;
           }
           alert(`Login failed. Please check your credentials. ${errorCode}`);
@@ -97,6 +110,12 @@ const LoginScreen = ({ navigation }) => {
         ) : (
           <Button title="Login" onPress={handleLogin} />
         )}
+        <CustomAlert
+        visible={alertVisible}
+        message={alertMessage}
+        alertType={alert_type}
+        onClose={() => setAlertVisible(false)}
+      />
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text className="mt-4 text-blue-500 text-center">
             Don't have an account? Register
