@@ -82,22 +82,50 @@ export async function updateUserData(userId, updatedData) {
   }
 }
 
+// Write user's entries to firebase realtime database
 export  function writeUserEntries(
+ 
   userId,
-  firstname,
-  lastname,
-  phoneNumber,
-  email,
-  age,
-  amount,
+  entrantfirstname,
+  entrantlastname,
+  entrantemail,
+  entrantphonenumber,
+  clientsfirstname,
+  clientslastname,
+  clientsphoneNumber,
+  clientsemail,
+  clientsage,
+  loanamount,
   
 ) {
   set(ref(db, "usersEntries/" + userId), {
-    firstname: firstname,
-    lastname: lastname,
-    phoneNumber: phoneNumber,
-    email: email,
-    age:age,
-    amount,
+    
+    entrantfirstname:entrantfirstname,
+    entrantlastname:entrantlastname,
+    entrantemail:entrantemail,
+    entrantphonenumber:entrantphonenumber,
+    clientsfirstname: clientsfirstname,
+    clientslastname: clientslastname,
+    clientsphoneNumber: clientsphoneNumber,
+    clientsemail: clientsemail,
+    clientsage:clientsage,
+    loanamount:loanamount,
     });
+}
+
+// Fetch the current user's entries from firebase realtime database
+export async function fetchUserEntries(userId) {
+  const userRef = ref(db, "usersEntries/" + userId);
+  try {
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("No data available for the user with userId:", userId);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
 }
