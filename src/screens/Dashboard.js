@@ -3,8 +3,10 @@ import { Text, View } from 'react-native';
 import { auth } from '../utils/firebaseConfig';
 import { fetchUserData } from '../utils/firebaseConfig'; // Ensure the correct path to your Firebase configuration
 import Greeting from '../utils/Greeting';
+
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,6 +29,9 @@ const Dashboard = () => {
 
     getUserData();
   }, []);
+
+
+  
 
   if (loading) {
     return (
