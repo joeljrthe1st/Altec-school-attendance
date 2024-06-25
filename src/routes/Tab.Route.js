@@ -43,10 +43,10 @@ const HomeTabNavigator = () => {
         tabBarInactiveTintColor: "gray",
         tabBarLabelStyle: {
           fontWeight: "bold",
-          fontSize: 12, // Adjust font size
+          fontSize: 8, // Adjust font size
         },
         tabBarStyle: {
-          height: 70, // Adjust tab bar height
+          height: 60, // Adjust tab bar height
           backgroundColor: "white",
           borderTopWidth: 0, // Hide top border
           shadowColor: "#000",
