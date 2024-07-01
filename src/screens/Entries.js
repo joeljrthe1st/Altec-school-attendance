@@ -86,7 +86,6 @@ const Entries = () => {
         setLoading(true);
         await writeUserEntries(
           userId,
-          currentuserid,
           entrantfirstname,
           entrantlastname,
           entrantemail,

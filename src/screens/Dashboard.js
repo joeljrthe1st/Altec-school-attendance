@@ -4,6 +4,7 @@ import { auth } from '../utils/firebaseConfig';
 import { fetchUserData } from '../utils/firebaseConfig'; // Ensure the correct path to your Firebase configuration
 import Greeting from '../utils/Greeting';
 import MyEntries from './MyEntries';
+import AllEntries from './AllEntries';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -54,7 +55,7 @@ const Dashboard = () => {
     <View className="flex-1 bg-white-100 m-1" >
       <Text className="text-xl font-bold text-blue-500 mt-12 ml-3 ">Dashboard</Text>
       <Greeting name={userData.firstname}/>
-      <MyEntries/>
+      <AllEntries/>
     </View>
   );
 };

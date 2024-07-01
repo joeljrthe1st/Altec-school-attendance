@@ -10,7 +10,7 @@ export default function MyEntries({ userEmail }) {
 
   useEffect(() => {
     async function loadEntries() {
-      const userEmail="Demoaccount@gmail.com"
+      
       try {
         const data = await fetchMyEntries(userEmail); // Pass userEmail to fetch filtered entries
         setEntries(data);
