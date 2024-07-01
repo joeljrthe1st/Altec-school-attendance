@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CustomAlert from "../utils/CustomAlert";
 
+
 const Entries = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,9 @@ const Entries = () => {
     mode: "onChange", // Trigger validation on change to enable/disable button
   });
 
+  const currentUser = auth.currentUser;
+  const currentuserid = currentUser.uid;
+
   const onSubmit = async (values) => {
     const currentUser = auth.currentUser;
     const entrantfirstname = userData.firstname;
@@ -82,6 +86,7 @@ const Entries = () => {
         setLoading(true);
         await writeUserEntries(
           userId,
+          currentuserid,
           entrantfirstname,
           entrantlastname,
           entrantemail,

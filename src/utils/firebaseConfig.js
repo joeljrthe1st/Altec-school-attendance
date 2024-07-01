@@ -27,7 +27,7 @@ const app = initializeApp(firebaseConfig);
 // const auth = getAuth(app);
 
 //Initialize database
-const db = getDatabase(app);
+export const db = getDatabase(app);
 
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
@@ -113,19 +113,40 @@ export  function writeUserEntries(
     });
 }
 
-// Fetch the current user's entries from firebase realtime database
-export async function fetchUserEntries(userId) {
-  const userRef = ref(db, "usersEntries/" + userId);
+// Fetch All entries from firebase realtime database
+
+export async function fetchUserEntries() {
+  const entriesRef = ref(db, "usersEntries");
   try {
-    const snapshot = await get(userRef);
+    const snapshot = await get(entriesRef);
     if (snapshot.exists()) {
       return snapshot.val();
     } else {
-      console.log("No data available for the user with userId:", userId);
+      console.log("No entries available.");
       return null;
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error fetching user entries:", error);
+    throw error;
+  }
+}
+
+// Fetch the current user's entries from firebase realtime database
+export async function fetchMyEntries(email) {
+  const entriesRef = ref(db, "usersEntries");
+  try {
+    const snapshot = await get(entriesRef);
+    if (snapshot.exists()) {
+      const entries = snapshot.val();
+      // Filter entries where entrantsemail matches the provided email
+      const filteredEntries = Object.values(entries).filter(entry => entry.entrantemail === email);
+      return filteredEntries;
+    } else {
+      console.log("No entries available.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching user entries:", error);
     throw error;
   }
 }

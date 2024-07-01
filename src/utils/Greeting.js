@@ -16,7 +16,7 @@ const Greeting = ({ name }) => {
 
   return (
     <View >
-      <Text >{getGreeting()}, {name}!</Text>
+      <Text className="text-base  text-black-500 ml-3 ">{getGreeting()}, {name}!</Text>
     </View>
   );
 };
