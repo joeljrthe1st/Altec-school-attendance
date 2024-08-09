@@ -1,40 +1,36 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
 import { getDatabase, ref, set, get, update } from "firebase/database";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, addDoc } from "firebase/firestore"; // Import Firestore
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAGWsgj7jXWvHm_Hsrnwo-8PYzsQ2AMaiw",
+  authDomain: "altec-school-monitor.firebaseapp.com",
+  databaseURL: "https://altec-school-monitor-default-rtdb.firebaseio.com",
+  projectId: "altec-school-monitor",
+  storageBucket: "altec-school-monitor.appspot.com",
+  messagingSenderId: "517523341179",
+  appId: "1:517523341179:web:2bfc397d0f71e15ef707de"
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
-// const auth = getAuth(app);
-
-//Initialize database
-export const db = getDatabase(app);
-
+// Initialize Firebase Authentication
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
 
+// Initialize Firebase Realtime Database
+export const db = getDatabase(app);
 
-// Write to firebase realtime database.
+// Initialize Firestore
+const firestore = getFirestore(app);
+
+// Write to Firebase Realtime Database
 export default function writeUserData(
   userId,
   firstname,
@@ -52,8 +48,7 @@ export default function writeUserData(
   });
 }
 
-
-// Fetch the current user's data from firebase realtime database
+// Fetch the current user's data from Firebase Realtime Database
 export async function fetchUserData(userId) {
   const userRef = ref(db, "users/" + userId);
   try {
@@ -70,7 +65,7 @@ export async function fetchUserData(userId) {
   }
 }
 
-/// Update the user's data in firebase realtime database
+// Update the user's data in Firebase Realtime Database
 export async function updateUserData(userId, updatedData) {
   const userRef = ref(db, "users/" + userId);
   try {
@@ -82,9 +77,8 @@ export async function updateUserData(userId, updatedData) {
   }
 }
 
-// Write user's entries to firebase realtime database
-export  function writeUserEntries(
- 
+// Write user's entries to Firebase Realtime Database
+export function writeUserEntries(
   userId,
   entrantfirstname,
   entrantlastname,
@@ -95,26 +89,23 @@ export  function writeUserEntries(
   clientsphoneNumber,
   clientsemail,
   clientsage,
-  loanamount,
-  
+  loanamount
 ) {
   set(ref(db, "usersEntries/" + userId), {
-    
-    entrantfirstname:entrantfirstname,
-    entrantlastname:entrantlastname,
-    entrantemail:entrantemail,
-    entrantphonenumber:entrantphonenumber,
+    entrantfirstname: entrantfirstname,
+    entrantlastname: entrantlastname,
+    entrantemail: entrantemail,
+    entrantphonenumber: entrantphonenumber,
     clientsfirstname: clientsfirstname,
     clientslastname: clientslastname,
     clientsphoneNumber: clientsphoneNumber,
     clientsemail: clientsemail,
-    clientsage:clientsage,
-    loanamount:loanamount,
-    });
+    clientsage: clientsage,
+    loanamount: loanamount,
+  });
 }
 
-// Fetch All entries from firebase realtime database
-
+// Fetch all entries from Firebase Realtime Database
 export async function fetchUserEntries() {
   const entriesRef = ref(db, "usersEntries");
   try {
@@ -131,7 +122,7 @@ export async function fetchUserEntries() {
   }
 }
 
-// Fetch the current user's entries from firebase realtime database
+// Fetch the current user's entries from Firebase Realtime Database
 export async function fetchMyEntries(email) {
   const entriesRef = ref(db, "usersEntries");
   try {
@@ -139,7 +130,9 @@ export async function fetchMyEntries(email) {
     if (snapshot.exists()) {
       const entries = snapshot.val();
       // Filter entries where entrantsemail matches the provided email
-      const filteredEntries = Object.values(entries).filter(entry => entry.entrantemail === email);
+      const filteredEntries = Object.values(entries).filter(
+        (entry) => entry.entrantemail === email
+      );
       return filteredEntries;
     } else {
       console.log("No entries available.");
@@ -147,6 +140,28 @@ export async function fetchMyEntries(email) {
     }
   } catch (error) {
     console.error("Error fetching user entries:", error);
+    throw error;
+  }
+}
+
+// Add a student to Firestore collection 'students'
+export async function addStudent(firstname, lastname, studentClass, stream, gender) {
+  try {
+    // Get a reference to the 'students' collection
+    const studentsCollection = collection(firestore, "students");
+
+    // Create a new document with the student's data
+    const docRef = await addDoc(studentsCollection, {
+      firstname: firstname,
+      lastname: lastname,
+      studentClass: studentClass,
+      stream: stream,
+      gender: gender,
+    });
+
+    console.log("Student added with ID: ", docRef.id);
+  } catch (error) {
+    console.error("Error adding student: ", error);
     throw error;
   }
 }

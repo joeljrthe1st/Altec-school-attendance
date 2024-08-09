@@ -140,12 +140,17 @@ const RegisterScreen = ({ navigation }) => {
             </Pressable>
           </View>
           {loading ? (
-            <ActivityIndicator size="large" color="#1e40af" />
+            <ActivityIndicator size="large" color="#010066" />
           ) : (
-            <Button title="Register" onPress={signIn} />
+           
+            <Pressable onPress={signIn} className="mt-4 bg-custom-dark-blue p-3 rounded">
+            <Text className="text-white text-center font-bold">
+             Register
+            </Text>
+          </Pressable>
           )}
           <Pressable onPress={() => navigation.navigate("Login")}>
-            <Text className="mt-4 text-blue-500 text-center">
+            <Text className="mt-4 text-blue-800 text-center">
               Do you have an account? Login
             </Text>
           </Pressable>

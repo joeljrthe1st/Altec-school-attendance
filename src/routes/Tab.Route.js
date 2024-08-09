@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Dashboard from "../screens/Dashboard";
 import Account from "../screens/Account";
-import Entries from "../screens/Entries";
+import Attendance from "../screens/Attendance";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -31,7 +31,7 @@ const HomeTabNavigator = () => {
 
           if (route.name === "Dashboard") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Entries") {
+          } else if (route.name === "Attendance") {
             iconName = focused ? "receipt" : "receipt-outline";
           } else if (route.name === "My Account") {
             iconName = focused ? "person" : "person-outline";
@@ -39,15 +39,15 @@ const HomeTabNavigator = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#2196F3",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "white",
         tabBarLabelStyle: {
           fontWeight: "bold",
           fontSize: 8, // Adjust font size
         },
         tabBarStyle: {
           height: 60, // Adjust tab bar height
-          backgroundColor: "white",
+          backgroundColor: "#010066",
           borderTopWidth: 0, // Hide top border
           shadowColor: "#000",
           shadowOffset: {
@@ -69,13 +69,13 @@ const HomeTabNavigator = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Entries"
-        component={Entries}
+        name="Attendance"
+        component={Attendance}
         options={{
-          headerShown: false,
-          headerTitle: "Entries",
+          headerShown: true,
+          headerTitle: "Attendance",
           headerTitleAlign: "left",
-          headerTitleStyle: { color: "green", fontSize: 26 },
+          headerTitleStyle: { color: "#010066", fontSize: 16 },
         }}
       />
       <Tab.Screen
@@ -83,9 +83,10 @@ const HomeTabNavigator = () => {
         component={Account}
         options={{
           headerShown: true,
+         
           headerTitle: "My Account",
           headerTitleAlign: "left",
-          headerTitleStyle: { color: "black", fontSize: 26 },
+          headerTitleStyle: { color:"#010066", fontSize: 26 },
         }}
       />
     </Tab.Navigator>

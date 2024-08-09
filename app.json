@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "staffmanager",
-    "slug": "staffmanager",
+    "name": "Altec School Attendance",
+    "slug": "Altec School Attendance",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

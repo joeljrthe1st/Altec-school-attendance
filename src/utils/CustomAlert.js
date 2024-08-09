@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   okButton: {
     paddingVertical: 7,
     paddingHorizontal: 30,
-    backgroundColor: "#2196F3",
+    backgroundColor: "#010066",
     borderRadius: 2,
   },
   buttonText: {

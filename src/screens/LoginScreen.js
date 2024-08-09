@@ -80,6 +80,7 @@ const LoginScreen = ({ navigation }) => {
       className="flex-1 justify-center items-center bg-gray-100"
     >
       <View>
+      <Text className="text-2xl text-custom-dark-blue font-bold mb-4 text-center">Altec School Attendance</Text>
         <Text className="text-2xl font-bold mb-4 text-center">Login</Text>
         <TextInput
           className="w-80 border border-gray-300 rounded px-3 py-2 mb-4"
@@ -101,9 +102,16 @@ const LoginScreen = ({ navigation }) => {
           </Pressable>
         </View>
         {loading ? (
-          <ActivityIndicator size="large" color="#1e40af" />
+          <ActivityIndicator size="large" color="#010066" />
         ) : (
-          <Button title="Login" onPress={handleLogin} />
+         
+          <Pressable onPress={handleLogin} className="mt-4 bg-custom-dark-blue p-3 rounded">
+          <Text className="text-white text-center font-bold">
+            Login
+          </Text>
+        </Pressable>
+        
+        
         )}
         <CustomAlert
           visible={alertVisible}
@@ -112,7 +120,7 @@ const LoginScreen = ({ navigation }) => {
           onClose={() => setAlertVisible(false)}
         />
         <Pressable onPress={() => navigation.navigate("Register")}>
-          <Text className="mt-4 text-blue-500 text-center">
+          <Text className="mt-4 text-blue-800 text-center">
             Don't have an account? Register
           </Text>
         </Pressable>

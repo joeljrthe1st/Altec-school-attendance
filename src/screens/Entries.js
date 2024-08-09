@@ -1,277 +1,158 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  View,
   Text,
+  View,
   TextInput,
-  Pressable,
+  Button,
+  StyleSheet,
+  Alert,
   ActivityIndicator,
 } from "react-native";
-import { auth, writeUserEntries, fetchUserData } from "../utils/firebaseConfig"; // Ensure the correct path to your Firebase configuration
-import { useForm, Controller } from "react-hook-form";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import CustomAlert from "../utils/CustomAlert";
-
+import { Picker } from "@react-native-picker/picker"; // Import Picker from the library
+import { addStudent } from "../utils/dbfunctions"; // Make sure the path is correct
 
 const Entries = () => {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alert_type, setAlerttype] = useState("");
+  // Using useState hook to manage state
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [age, setAge] = useState("");
+  const [studentClass, setStudentClass] = useState("s1");
+  const [stream, setStream] = useState("A");
+  const [gender, setGender] = useState("Male");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        setLoading(false);
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const userId = currentUser.uid;
-          const data = await fetchUserData(userId);
-          setUserData(data);
-        } else {
-          console.error("No authenticated user found.");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Handle the Add Student button press
+  const handleAddStudent = async () => {
+    if (!firstname || !lastname || !studentClass || !stream || !gender || !age) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
 
-    getUserData();
-  }, []);
+    setLoading(true);
 
-  const validationSchema = Yup.object().shape({
-    clientsfirstname: Yup.string().required("Client's first name is required"),
-    clientslastname: Yup.string().required("Client's last name is required"),
-    clientsphoneNumber: Yup.string()
-      .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
-      .required("Client's phone number is required"),
-    clientsemail: Yup.string()
-      .email("Invalid email")
-      .required("Client's email is required"),
-    clientsage: Yup.number()
-      .positive("Age must be positive")
-      .integer("Age must be an integer")
-      .required("Client's age is required"),
-    loanamount: Yup.number()
-      .positive("Loan amount must be positive")
-      .required("Loan amount is required"),
-  });
+    try {
+      // Call the addStudent function to add the student data
+      await addStudent(firstname, lastname, studentClass, stream, gender, age);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isValid },
-    reset,
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-    mode: "onChange", // Trigger validation on change to enable/disable button
-  });
+      // Reset state to default values
+      setFirstname("");
+      setLastname("");
+      setAge("");
+      setStudentClass("s1");
+      setStream("A");
+      setGender("Male");
+      setLoading(false);
 
-  const currentUser = auth.currentUser;
-  const currentuserid = currentUser.uid;
-
-  const onSubmit = async (values) => {
-    const currentUser = auth.currentUser;
-    const entrantfirstname = userData.firstname;
-    const entrantlastname = userData.lastname;
-    const entrantemail = userData.email;
-    const entrantphonenumber = userData.phoneNumber;
-    if (currentUser) {
-      const userId =
-        userData.firstname + "-" + userData.lastname + "-" + Date.now();
-      try {
-        setLoading(true);
-        await writeUserEntries(
-          userId,
-          entrantfirstname,
-          entrantlastname,
-          entrantemail,
-          entrantphonenumber,
-          values.clientsfirstname,
-          values.clientslastname,
-          values.clientsphoneNumber,
-          values.clientsemail,
-          values.clientsage,
-          values.loanamount
-        );
-        console.log("User entries written successfully");
-        setAlertMessage("A new User has been added successfuly");
-        setAlerttype("success");
-        setAlertVisible(true);
-        reset();
-      } catch (error) {
-        console.error("Error writing user entries:", error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      console.error("No authenticated user found.");
+      Alert.alert("Success", "Student added successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to add student. Please try again.");
+      console.error("Error adding student:", error);
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#1e40af" />;
-  }
-
   return (
-    <View className="flex-1 justify-center items-center bg-white">
-      <Text className="text-2xl font-bold text-blue-500 mb-4">
-        User Entries
-      </Text>
-
-      <Controller
-        control={control}
-        name="clientsfirstname"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Client's First Name"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-              className="h-10 border border-gray-300 mb-2 p-2 w-80"
-            />
-            {errors.clientsfirstname && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.clientsfirstname.message}
-              </Text>
-            )}
-          </>
-        )}
+    <View style={styles.container}>
+      <Text style={styles.title}>Add Student</Text>
+      
+      {/* First Name Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="First Name"
+        value={firstname}
+        onChangeText={setFirstname}
+      />
+      
+      {/* Last Name Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Last Name"
+        value={lastname}
+        onChangeText={setLastname}
+      />
+      
+      {/* Age Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Age"
+        value={age}
+        onChangeText={setAge}
+        keyboardType="numeric" // Ensure only numbers are entered
       />
 
-      <Controller
-        control={control}
-        name="clientslastname"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Client's Last Name"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              value={value}
-              className="h-10 border border-gray-300 mb-2 p-2 w-80"
-            />
-            {errors.clientslastname && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.clientslastname.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
+      {/* Picker for Student Class */}
+      <Picker
+        selectedValue={studentClass}
+        style={styles.picker}
+        onValueChange={setStudentClass}
+      >
+        <Picker.Item label="S1" value="s1" />
+        <Picker.Item label="S2" value="s2" />
+        <Picker.Item label="S3" value="s3" />
+        <Picker.Item label="S4" value="s4" />
+        <Picker.Item label="S5" value="s5" />
+        <Picker.Item label="S6" value="s6" />
+      </Picker>
 
-      <Controller
-        control={control}
-        name="clientsphoneNumber"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Client's Phone Number"
-              onChangeText={onChange}
-              keyboardType="number"
-              textContentType="telephoneNumber"
-              onBlur={onBlur}
-              value={value}
-              className="h-10 border border-gray-300 mb-2 p-2 w-80"
-            />
-            {errors.clientsphoneNumber && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.clientsphoneNumber.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
+      {/* Picker for Stream */}
+      <Picker
+        selectedValue={stream}
+        style={styles.picker}
+        onValueChange={setStream}
+      >
+        <Picker.Item label="A" value="A" />
+        <Picker.Item label="B" value="B" />
+        <Picker.Item label="C" value="C" />
+        <Picker.Item label="D" value="D" />
+      </Picker>
 
-      <Controller
-        control={control}
-        name="clientsemail"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Client's Email"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              value={value}
-              className="h-10 border border-gray-300 mb-2 p-2 w-80"
-            />
-            {errors.clientsemail && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.clientsemail.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
+      {/* Picker for Gender */}
+      <Picker
+        selectedValue={gender}
+        style={styles.picker}
+        onValueChange={setGender}
+      >
+        <Picker.Item label="Male" value="Male" />
+        <Picker.Item label="Female" value="Female" />
+      </Picker>
 
-      <Controller
-        control={control}
-        name="clientsage"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Client's Age"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="number-pad"
-              value={value}
-              className="h-10 border border-gray-300 mb-2 p-2 w-80"
-            />
-            {errors.clientsage && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.clientsage.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
+      {/* Add Student Button */}
+      <Button title="Add Student" onPress={handleAddStudent} disabled={loading} />
 
-      <Controller
-        control={control}
-        name="loanamount"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <TextInput
-              placeholder="Loan Amount"
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="numeric"
-              value={value}
-              className="h-10 border border-gray-300 mb-4 p-2 w-80"
-            />
-            {errors.loanamount && (
-              <Text className="text-red-500 text-xs mb-2">
-                {errors.loanamount.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
-      {loading ? (
-        <ActivityIndicator size="large" color="#1e40af" />
-      ) : (
-        <Pressable
-          onPress={handleSubmit(onSubmit)}
-          className="bg-blue-500 p-2 rounded w-80"
-          disabled={!isValid}
-        >
-          <Text className="text-white text-center">Submit</Text>
-        </Pressable>
-      )}
-      <CustomAlert
-        visible={alertVisible}
-        message={alertMessage}
-        alertType={alert_type}
-        onClose={() => setAlertVisible(false)}
-      />
+      {/* Show loading indicator if adding student */}
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: "100%",
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+  },
+  picker: {
+    height: 50,
+    width: "100%",
+    marginBottom: 10,
+  },
+});
 
 export default Entries;
