@@ -1,2 +1,2 @@
-# staff-manager1 App
+# Classroom Attendance App
 "# Altec-school-attendance" 
